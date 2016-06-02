@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title></title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+
+
+
+
+</head>
+
+<body>
+<p>####This plot of the acf of the breaking bad rating shows that there is significant autocorrelation with the data. It seems that there is a significant positive correlation up to lag 2. Also there seems to be a significant positive correlation at around lag 6 and 7, this could be due to the fact that new plot lines happen around 6 episodes in.</p>
+
+<p>###This plot shows that an arma model should be used to fit the data, and it may have an ar=1 or 2, because the pacf goes to zero after lag 1.</p>
+
+<p>arima(x = x, order = c(p, 0, q))
+Coefficients:
+         ar1      ma1      ma2      ma3      ma4     ma5     ma6  intercept
+      0.9585  -0.3959  -0.0769  -0.2306  -0.6272  0.2692  0.4208     9.0892
+s.e.  0.0507   0.1254   0.1397   0.1273   0.1330  0.1534  0.1289     0.2701</p>
+
+<p>sigma<sup>2</sup> estimated as 0.1015:  log likelihood = -20.7,  aic = 59.39</p>
+
+<p>arima(x = x, order = c(p2, 0, q2))
+Coefficients:
+         ar1      ar2     ar3      ar4     ar5      ma1     ma2      ma3  intercept
+      1.2547  -1.1814  1.1366  -0.6604  0.4002  -0.6559  0.9120  -0.7701     9.1133
+s.e.  0.1480   0.1836  0.1899   0.1876  0.1182   0.1337  0.0873   0.1298     0.2828</p>
+
+<p>sigma<sup>2</sup> estimated as 0.1002:  log likelihood = -20.03,  aic = 60.05</p>
+
+<p>arima(x = x, order = c(p3, 0, q3))
+Coefficients:
+         ar1     ar2      ma1      ma2      ma3      ma4     ma5     ma6  intercept
+      0.8978  0.0616  -0.3472  -0.1037  -0.2258  -0.6355  0.2399  0.4394     9.0939
+s.e.  0.2673  0.2660   0.2433   0.1790   0.1281   0.1376  0.1905  0.1449     0.2782</p>
+
+<p>sigma<sup>2</sup> estimated as 0.1015:  log likelihood = -20.67,  aic = 61.34</p>
+
+</body>
+
+</html>
+

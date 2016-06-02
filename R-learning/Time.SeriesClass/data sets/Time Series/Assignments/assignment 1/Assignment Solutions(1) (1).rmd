@@ -1,0 +1,121 @@
+---
+title: "stat 4181 - hw1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Blackboard
+```{r}
+library(rdatamarket)
+l <- dmseries("https://datamarket.com/data/set/22vk/ozone-concentration-azusa-1956-1970#!ds=22vk&display=line")
+plot(l)
+acf(l)
+```
+
+Holt Winters
+```{r}
+l.hw <- HoltWinters(l)
+plot(l.hw)
+```
+
+
+```{r, warning=FALSE}
+library(forecast)
+l.new <- l[1:(12*3)]
+l.new.hw <- HoltWinters(l.new)
+xhat <- forecast(l.new.hw,1)$mean
+allResiduals <- c()
+
+for(t in 37:length(l)){
+  allResiduals[t-36] <- l[t]-xhat
+  
+  l.new <- l[1:t]
+  l.new.hw <- HoltWinters(l.new)
+  xhat <- forecast(l.new.hw,1)$mean
+}
+
+print(mean(allResiduals^2))
+print(mean(abs(allResiduals)))
+```
+
+
+```{r, warning=FALSE}
+library(forecast)
+l.new <- l[1:(12*3)]
+l.new.hw <- HoltWinters(l.new,seasonal = "multiplicative")
+xhat <- forecast(l.new.hw,1)$mean
+allResiduals <- c()
+
+for(t in 37:length(l)){
+  allResiduals[t-36] <- l[t]-xhat
+  
+  l.new <- l[1:t]
+  l.new.hw <- HoltWinters(l.new,seasonal = "multiplicative")
+  xhat <- forecast(l.new.hw,1)$mean
+}
+
+print(mean(allResiduals^2))
+print(mean(abs(allResiduals)))
+```
+
+1- Install the forecast package.
+```{r}
+library(forecast)
+```
+
+2- Obtain the 2 step ahead forecast accuracy of your method.
+```{r}
+l.new <- l[1:(12*3)]
+l.new.hw <- HoltWinters(l.new)
+xhat <- (forecast(l.new.hw,2)$mean)[2]
+allResiduals <- c()
+l.new.length.1 <- length(l.new)
+
+for(t in 37:(length(l)-1)){
+  allResiduals[t-l.new.length.1] <- l[t+1]-xhat
+  l.new <- l[1:t]
+  l.new.hw <- HoltWinters(l.new)
+  xhat <- (forecast(l.new.hw,2)$mean)[2]
+}
+
+print(mean(allResiduals^2))
+print(mean(abs(allResiduals)))
+```
+
+3- Adapt your code from step 1 to calculate the forecasting accuracy of any n-step forecast.
+
+```{r}
+allMse <- numeric(24)
+allMad <- numeric(24)
+
+for(temp.n.step in 1:24){
+  
+  N.STEP <- temp.n.step
+  
+  l.new <- l[1:(12*3)]
+  l.new.hw <- HoltWinters(l.new)
+  xhat <- (forecast(l.new.hw,N.STEP)$mean)[N.STEP]
+  allResiduals <- c()
+  l.new.length.1 <- length(l.new)
+  
+  for(t in 37:(length(l)-N.STEP+1)){
+    allResiduals[t-l.new.length.1] <- l[t+N.STEP-1]-xhat
+    l.new <- l[1:t]
+    l.new.hw <- HoltWinters(l.new)
+    xhat <- (forecast(l.new.hw,N.STEP)$mean)[N.STEP]
+  }
+  
+  allMse[temp.n.step] <- (mean(allResiduals^2))
+  allMad[temp.n.step] <- (mean(abs(allResiduals)))
+}
+
+print(allMse)
+print(allMad)
+plot(allMse,type='o')
+plot(allMad,type='o')
+
+
+```
